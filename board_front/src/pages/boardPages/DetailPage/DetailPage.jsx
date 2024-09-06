@@ -85,7 +85,7 @@ const contentBox = css`
 `;
 
 function DetailPage(props) {
-    const naviage = useNavigate();
+    const navigate = useNavigate();
     const params = useParams();
     const boardId = params.boardId;
     const queryClient = useQueryClient();
@@ -136,16 +136,16 @@ function DetailPage(props) {
     );
 
     const handleLikeOnClick = () => {
+        if (!userInfoData?.data) {
+            if (window.confirm("로그인 후 이용가능합니다. 로그인 페이지로 이동하시겠습니까?")) {
+                navigate("/user/login");
+            }
+            return;
+        }
         likeMutation.mutateAsync();
     }
 
     const handleDislikeOnClick = () => {
-        if (!userInfoData?.data) {
-            if (window.confirm("로그인 후 이용가능합니다. 로그인 페이지로 이동하시겠습니까?")) {
-                naviage("/user/login");
-            }
-            return;
-        }
         dislikeMutation.mutateAsync();
     }
 
