@@ -159,3 +159,6 @@ ALTER TABLE `USER` ADD COLUMN 'email' VARCHAR(255) NOT NULL [42001-200]
 2024-09-05 10:56:12 jdbc[23]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE USER WHERE[*] ID=2"; expected "., FROM"; SQL statement:
 delete user where id=2 [42001-200]
+2024-09-06 09:38:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE BOARD ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE BOARD ( [42001-200]

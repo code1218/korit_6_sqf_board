@@ -9,6 +9,7 @@ import { storage } from "../../../firebase/firebase";
 import { v4 as uuid } from "uuid";
 import { CircleLoader, RingLoader } from "react-spinners";
 import { instance } from "../../../apis/util/instance";
+import { useNavigate } from "react-router-dom";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -79,6 +80,7 @@ const loadingLayout = css`
 `;
 
 function WritePage(props) {
+    const navigate = useNavigate();
     const [board, setBoard] = useState({
         title: "",
         content: ""
@@ -89,12 +91,10 @@ function WritePage(props) {
     const handleWriteSubmitOnClick = () => {
         instance.post("/board", board)
             .then((response) => {
-                // 응답 데이터는 response.data에 저장되어 있습니다.
-                console.log(response.data); // 응답 데이터를 콘솔에 출력
-                // 여기서 응답 데이터를 사용하여 필요한 작업을 수행
+                alert("작성이 완료되었습니다.");
+                navigate(`/board/detail/${response.data.boardId}`);
             })
             .catch((error) => {
-                console.error(error); // 오류 처리
                 const fieldErrors = error.response.data;
 
                 for (let fieldError of fieldErrors) {
@@ -110,6 +110,29 @@ function WritePage(props) {
                     }
                 }
             });
+    }
+
+    const handleWriteSubmitOnClick2 = async () => {
+        try {
+            const response = await instance.post("/board", board)
+            alert("작성이 완료되었습니다.");
+            navigate(`/board/detail/${response.data.boardId}`);
+        } catch (error) {
+            const fieldErrors = error.response.data;
+
+            for (let fieldError of fieldErrors) {
+                if (fieldError.field === "title") {
+                    alert(fieldError.defaultMessage);
+                    return;
+                }
+            }
+            for (let fieldError of fieldErrors) {
+                if (fieldError.field === "content") {
+                    alert(fieldError.defaultMessage);
+                    return;
+                }
+            }
+        }
     }
 
     const handleTitleInputOnChange = (e) => {

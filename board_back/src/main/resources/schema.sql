@@ -27,11 +27,18 @@
 --    role_id BIGINT not null
 --);
 
-CREATE TABLE OAUTH2_USER (
+--CREATE TABLE OAUTH2_USER (
+--    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--    user_id BIGINT not null,
+--    oauth2_name VARCHAR(255) UNIQUE not null,
+--    provider VARCHAR(255) not null
+--);
+
+CREATE TABLE BOARD (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT not null,
-    oauth2_name VARCHAR(255) UNIQUE not null,
-    provider VARCHAR(255) not null
+    title VARCHAR(255) NOT NULL,
+    content LONGTEXT NOT NULL,
+    user_id BIGINT NOT NULL
 );
 
 --ALTER TABLE USER ADD COLUMN email VARCHAR(255) NOT NULL;
