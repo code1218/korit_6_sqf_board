@@ -89,6 +89,7 @@ function WritePage(props) {
     const [isUploading, setUploading] = useState(false);
 
     const handleWriteSubmitOnClick = () => {
+        console.log(board)
         instance.post("/board", board)
             .then((response) => {
                 alert("작성이 완료되었습니다.");
@@ -174,6 +175,10 @@ function WritePage(props) {
                     editor.setSelection(editPoint.index + 1);
                     editor.insertText(editPoint.index + 1, "\n");
                     setUploading(false);
+                    setBoard(board => ({
+                        ...board,
+                        content: editor.root.innerHTML,
+                    }));
                 }
             );
         }
@@ -223,8 +228,8 @@ function WritePage(props) {
                         imageResize: {
                             parchment: Quill.import("parchment")
                         },
-
                     }}
+                    value={board.content}
                 />
             </div>
         </div>
