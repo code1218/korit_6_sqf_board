@@ -183,14 +183,57 @@ function DetailPage(props) {
     const queryClient = useQueryClient();
     const userInfoData = queryClient.getQueryData("userInfoQuery");
 
-    const [selectedCommentId, setSelectedCommentId] = useState(0);
+    const [commentData, setCommentData] = useState({
+        boardId,
+        parentId: null,
+        content: "",
+    });
 
     const handleReplyButtonOnClick = (commentId) => {
-        setSelectedCommentId(id => commentId === id ? 0 : commentId);
+        setCommentData({
+            boardId,
+            parentId: null,
+            content: "",
+        });
+
+        setCommentData(commentData => ({
+            ...commentData,
+            parentId: commentId === commentData.parentId ? null : commentId,
+        }));
     }
 
     const handleCommentInputOnChange = (e) => {
+        setCommentData(commentData => ({
+            ...commentData,
+            [e.target.name]: e.target.value,
+        }));
+    }
 
+    const commentMutation = useMutation(
+        async () => {
+            return await instance.post("/board/comment", commentData);
+        },
+        {
+            onSuccess: response => {
+                alert("댓글 작성이 완료되었습니다.");
+                setCommentData({
+                    boardId,
+                    parentId: null,
+                    content: "",
+                });
+                comments.refetch();
+            }
+        }
+    );
+
+    const handleCommentSubmitOnClick = () => {
+        if (!userInfoData?.data) {
+            if (window.confirm("로그인 후 이용가능합니다. 로그인 페이지로 이동하시겠습니까?")) {
+                navigate("/user/login");
+            }
+            return;
+        }
+        commentMutation.mutateAsync();
     }
 
     const board = useQuery(
@@ -321,14 +364,17 @@ function DetailPage(props) {
                     }}>
                     </div>
                     <div css={commentContainer}>
-                        <h2>댓글</h2>
-                        <div css={commentWriteBox(0)}>
-                            <textarea name="" placeholder="댓글을 입력하세요."></textarea>
-                            <button>작성하기</button>
-                        </div>
+                        <h2>댓글 {comments?.data?.data.commentCount}</h2>
+                        {
+                            commentData.parentId === null &&
+                            <div css={commentWriteBox(0)}>
+                                <textarea name="content" onChange={handleCommentInputOnChange} value={commentData.content} placeholder="댓글을 입력하세요."></textarea>
+                                <button onClick={handleCommentSubmitOnClick}>작성하기</button>
+                            </div>
+                        }
                         <div>
                             {
-                                comments.data.data.comments.map(comment =>
+                                comments?.data?.data.comments.map(comment =>
                                     <>
                                         <div css={commentListContainer(comment.level)}>
                                             <div>
@@ -355,10 +401,10 @@ function DetailPage(props) {
                                             </div>
                                         </div>
                                         {
-                                            selectedCommentId === comment.id &&
+                                            commentData.parentId === comment.id &&
                                             <div css={commentWriteBox(comment.level)}>
-                                                <textarea name="" placeholder="답글을 입력하세요."></textarea>
-                                                <button>작성하기</button>
+                                                <textarea name="content" onChange={handleCommentInputOnChange} value={commentData.content} placeholder="답글을 입력하세요."></textarea>
+                                                <button onClick={handleCommentSubmitOnClick}>작성하기</button>
                                             </div>
                                         }
                                     </>
