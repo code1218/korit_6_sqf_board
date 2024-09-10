@@ -1900,3 +1900,966 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
 	... 18 more
+2024-09-10 09:16:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:16:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:17:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:17:04 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:17:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:17:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 09:17:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255),[*] 5, 0)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        WHERE
+            CT.BOARD_ID = ?
+        ORDER BY
+            CT.PATH;"; expected "FOR, UNSIGNED, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255), 5, 0)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        where
+            ct.board_id = ?
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 12:41:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255)), 5, 0) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+                AND BOARD_ID = ?
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+            WHERE
+                AND C[*].BOARD_ID = ?
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        ORDER BY
+            CT.PATH;"; expected "(, ., [, ::, AT, FORMAT, *, /, %, +, -, ||, ~, !~, NOT, LIKE, ILIKE, REGEXP, IS, IN, BETWEEN, AND, _LOCAL_AND_GLOBAL_, OR, GROUP, HAVING, WINDOW, QUALIFY, UNION, EXCEPT, MINUS, INTERSECT, ORDER, OFFSET, FETCH, LIMIT, SAMPLE_SIZE, FOR, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255)), 5, 0) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+                and board_id = ?
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+            where
+                and c.board_id = ?
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 12:41:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                LPAD(CAST(ID AS VARCHAR(255)), 5, 0) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+                AND BOARD_ID = ?
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', LPAD(C.ID, 5, 0)) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON(C.PARENT_ID = CT.ID)
+            WHERE
+                AND C[*].BOARD_ID = ?
+        )
+
+        SELECT
+            CT.ID,
+            CT.BOARD_ID AS BOARDID,
+            CT.PARENT_ID AS PARENTID,
+            CT.CONTENT,
+            CT.WRITER_ID AS WRITERID,
+            CT.CREATE_DATE AS CREATEDATE,
+            CT.LEVEL,
+            U.USERNAME,
+            U.IMG
+        FROM
+            COMMENT_TREE CT
+            LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+        ORDER BY
+            CT.PATH;"; expected "(, ., [, ::, AT, FORMAT, *, /, %, +, -, ||, ~, !~, NOT, LIKE, ILIKE, REGEXP, IS, IN, BETWEEN, AND, _LOCAL_AND_GLOBAL_, OR, GROUP, HAVING, WINDOW, QUALIFY, UNION, EXCEPT, MINUS, INTERSECT, ORDER, OFFSET, FETCH, LIMIT, SAMPLE_SIZE, FOR, )"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                LPAD(CAST(id AS VARCHAR(255)), 5, 0) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+                and board_id = ?
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', LPAD(c.id, 5, 0)) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON(c.parent_id = ct.id)
+            where
+                and c.board_id = ?
+        )
+
+        SELECT
+            ct.id,
+            ct.board_id as boardId,
+            ct.parent_id as parentId,
+            ct.content,
+            ct.writer_id as writerId,
+            ct.create_date as createDate,
+            ct.level,
+            u.username,
+            u.img
+        FROM
+            comment_tree ct
+            left outer join user u on(u.id = ct.writer_id)
+        ORDER BY
+            ct.path; [42001-200]
+2024-09-10 15:50:10 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW BEGIN[*] DELETE FROM COMMENT WHERE PARENT_ID = OLD.ID END"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN delete from comment where parent_id = old.id END [42001-200]
+2024-09-10 16:03:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELIMITER[*] CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW BEGIN DELETE FROM COMMENT WHERE PARENT_ID = OLD.ID"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+DELIMITER CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN delete from comment where parent_id = old.id [42001-200]
+2024-09-10 16:04:07 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELIMITER[*]                                                                                                                                d"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+DELIMITER // CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN delete from comment where parent_id = old.id [42001-200]
+2024-09-10 16:04:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELIMITER[*]                                                                                                                                d"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+DELIMITER // CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:04:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELIMITER[*]                                                                                                                                d"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+DELIMITER // CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:05:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW BEGIN[*] DELETE FROM COMMENT WHERE PARENT_ID = OLD.ID"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:05:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELIMITER[*]                                                                                                                                d"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+DELIMITER // CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:06:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW DELETE[*] FROM COMMENT WHERE PARENT_ID = OLD.ID"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:07:10 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW BEGIN[*] DELETE FROM COMMENT WHERE PARENT_ID = OLD.ID"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW BEGIN DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:08:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW DELETE[*] FROM COMMENT WHERE PARENT_ID = OLD.ID"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW DELETE FROM comment WHERE parent_id = OLD.id [42001-200]
+2024-09-10 16:13:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT
+        BEFORE DELETE ON COMMENT
+        FOR EACH ROW
+        BEGIN[*]
+        DELETE FROM COMMENT WHERE PARENT_ID = OLD.ID;
+        END;"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment
+        BEFORE DELETE ON comment
+        FOR EACH ROW
+        BEGIN
+        DELETE FROM comment WHERE parent_id = OLD.id;
+        END; [42001-200]
+2024-09-10 16:15:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT
+        BEFORE DELETE ON COMMENT
+        FOR EACH ROW
+        DELETE[*] FROM COMMENT WHERE PARENT_ID = OLD.ID;"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment
+        BEFORE DELETE ON comment
+        FOR EACH ROW
+        DELETE FROM comment WHERE parent_id = OLD.id; [42001-200]
+2024-09-10 16:15:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE ALIAS IF NOT EXISTS delete_child_comments AS [*]$$ void deleteChildComments(int parentId) { String sql = ""DELETE FROM comment WHERE parent_id = ?""" [42000-200]
+2024-09-10 16:16:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE ALIAS IF NOT EXISTS delete_child_comments AS [*]$$ void deleteChildComments(int parentId) throws SQLException { String sql = ""DELETE FROM comment WHERE parent_id = ?""" [42000-200]
+2024-09-10 16:17:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT BEFORE DELETE ON COMMENT FOR EACH ROW CALL 'DELETE FROM comment WHERE parent_id = OLD.id'[*]"; expected "identifier"; SQL statement:
+CREATE TRIGGER before_delete_comment BEFORE DELETE ON comment FOR EACH ROW CALL 'DELETE FROM comment WHERE parent_id = OLD.id' [42001-200]
+2024-09-10 16:19:35 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT
+        BEFORE DELETE ON COMMENT
+        FOR EACH ROW
+        CALL 'DELETE FROM comment WHERE parent_id = OLD.id'[*];"; expected "identifier"; SQL statement:
+CREATE TRIGGER before_delete_comment
+        BEFORE DELETE ON comment
+        FOR EACH ROW
+        CALL 'DELETE FROM comment WHERE parent_id = OLD.id'; [42001-200]
+2024-09-10 16:20:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT
+        BEFORE DELETE ON COMMENT
+        FOR EACH ROW
+        DELETE[*] FROM COMMENT WHERE PARENT_ID = OLD.ID;"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment
+        BEFORE DELETE ON comment
+        FOR EACH ROW
+        DELETE FROM comment WHERE parent_id = OLD.id; [42001-200]
+2024-09-10 16:35:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TRIGGER BEFORE_DELETE_COMMENT
+        BEFORE DELETE ON COMMENT
+        FOR EACH ROW
+        DELETE[*] FROM COMMENT WHERE PARENT_ID = OLD.ID;"; expected "QUEUE, NOWAIT, AS, CALL"; SQL statement:
+CREATE TRIGGER before_delete_comment
+        BEFORE DELETE ON comment
+        FOR EACH ROW
+        DELETE FROM comment WHERE parent_id = OLD.id; [42001-200]
