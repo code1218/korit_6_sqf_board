@@ -17,6 +17,14 @@
         DELETE FROM comment WHERE parent_id = OLD.id;
     </update>
 
+    <update id="updateById">
+        update comment
+        set
+            content = #{content}
+        where
+            id = #{id}
+    </update>
+
     <delete id="deleteById">
         WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date) AS (
             SELECT
