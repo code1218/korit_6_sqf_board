@@ -107,10 +107,44 @@
             left outer join user u on(u.id = b.user_id)
             left outer join like_count lc on(lc.board_id = b.id)
         where
-
+            1 = 1
+            <if test='option.equals("all")'>
+                and(
+                    b.title like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+                    or u.username like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+                )
+            </if>
+            <if test='option.equals("title")'>
+                and b.title like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+            </if>
+            <if test='option.equals("writer")'>
+                and u.username like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+            </if>
         order by
             b.id desc
         limit #{startIndex}, #{limit}
+    </select>
+
+    <select id="getCountAllBySearch" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            board b
+            left outer join user u on(u.id = b.user_id)
+        where
+            1 = 1
+            <if test='option.equals("all")'>
+                and(
+                    b.title like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+                    or u.username like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+                )
+            </if>
+            <if test='option.equals("title")'>
+                and b.title like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+            </if>
+            <if test='option.equals("writer")'>
+                and u.username like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+            </if>
     </select>
 
 </mapper>

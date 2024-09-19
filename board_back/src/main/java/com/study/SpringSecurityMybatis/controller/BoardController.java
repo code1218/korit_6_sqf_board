@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -28,8 +29,7 @@ public class BoardController {
 
     @GetMapping("/board/search")
     public ResponseEntity<?> getSearchBoards(ReqSearchBoardDto dto) {
-        System.out.println(dto);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(boardService.getSearchBoard(dto));
     }
 
     @GetMapping("/board/list")

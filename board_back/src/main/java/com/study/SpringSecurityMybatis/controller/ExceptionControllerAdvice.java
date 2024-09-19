@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
@@ -19,7 +21,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(SignupException.class)
     public ResponseEntity<?> signupException(SignupException e) {
-        return ResponseEntity.internalServerError().body(e.getMessage());
+        return ResponseEntity.internalServerError().body(Map.of("isSuccess", false, "message", e.getMessage()));
     }
 
     @ExceptionHandler(AuthenticationException.class)

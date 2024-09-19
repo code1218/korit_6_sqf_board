@@ -46,12 +46,15 @@ public class BoardService {
         Map<String, Object> params = Map.of(
                 "startIndex", startIndex,
                 "limit", dto.getLimit(),
-                "searchValue", dto.getSearch()
+                "searchValue", dto.getSearch() == null ? "" : dto.getSearch(),
+                "option", dto.getOption() == null || dto.getOption().isBlank() ? "all" : dto.getOption()
         );
         List<BoardList> boardLists = boardMapper.findAllBySearch(params);
-
+        Integer boardTotalCount = boardMapper.getCountAllBySearch(params);
 
         return RespBoardListDto.builder()
+                .boards(boardLists)
+                .totalCount(boardTotalCount)
                 .build();
     }
 
