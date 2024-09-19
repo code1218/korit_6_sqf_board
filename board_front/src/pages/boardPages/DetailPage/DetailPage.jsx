@@ -5,6 +5,7 @@ import { instance } from "../../../apis/util/instance";
 import { css } from "@emotion/react";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { useState } from "react";
+import 'react-quill/dist/quill.snow.css';
 
 const layout = css`
     box-sizing: border-box;
@@ -412,9 +413,11 @@ function DetailPage(props) {
                             </div>
                         </div>
                     </div>
-                    <div css={contentBox} dangerouslySetInnerHTML={{
-                        __html: board.data.data.content
-                    }}>
+                    <div css={contentBox}>
+                        <div className="ql-editor" dangerouslySetInnerHTML={{
+                            __html: board.data.data.content
+                        }}>
+                        </div>
                     </div>
                     <div css={commentContainer}>
                         <h2>댓글 {comments?.data?.data.commentCount}</h2>

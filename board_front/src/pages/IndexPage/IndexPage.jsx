@@ -35,6 +35,10 @@ const leftBox = css`
     border: 2px solid #dbdbdb;
     border-radius: 10px;
     width: 64%;
+
+    & a {
+        margin-right: 10px;
+    }
 `;
 
 const rightBox = css`
@@ -139,7 +143,9 @@ function IndexPage(props) {
 
             <main css={main}>
                 <div css={leftBox}>
-                    <Link to={"/board"}>게시글</Link>
+                    <Link to={"/board/number?page=1"}>게시글 번호</Link>
+                    <Link to={"/board/scroll"}>게시글 스크롤</Link>
+                    <Link to={"/board/search?page=1"}>게시글 검색</Link>
                     <Link to={"/board/write"}>글쓰기</Link>
                 </div>
                 {

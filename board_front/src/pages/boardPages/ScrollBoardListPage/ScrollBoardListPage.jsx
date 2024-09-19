@@ -139,6 +139,7 @@ function ScrollBoardListPage(props) {
         async ({ pageParam = 1 }) => await instance.get(`/board/list?page=${pageParam}&limit=${limit}`),
         {
             getNextPageParam: (lastPage, allPage) => {
+                console.log(allPage)
                 const totalPageCount = lastPage.data.totalCount % limit === 0
                     ? lastPage.data.totalCount / limit
                     : Math.floor(lastPage.data.totalCount / limit) + 1;
