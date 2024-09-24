@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signupApi } from '../../apis/signupApi';
+import { useMutation } from 'react-query';
+import { instance } from '../../apis/util/instance';
 
 const layout = css`
     display: flex;
@@ -72,7 +74,7 @@ const joinButton = css`
 function UserJoinPage(props) {
     const navigate = useNavigate();
 
-    const [ inputUser, setInputUser ] = useState({
+    const [inputUser, setInputUser] = useState({
         username: "",
         password: "",
         checkPassword: "",
@@ -80,13 +82,17 @@ function UserJoinPage(props) {
         email: ""
     });
 
-    const [ fieldErrorMessages, setFieldErrorMessages ] = useState({
+    const [fieldErrorMessages, setFieldErrorMessages] = useState({
         username: <></>,
         password: <></>,
         checkPassword: <></>,
         name: <></>,
         email: <></>,
-    }); 
+    });
+
+    const sendMail = useMutation(
+        async (toEmail) => await instance.post("/auth/mail", { toEmail })
+    )
 
     const handleInputUserOnChange = (e) => {
         setInputUser(inputUser => ({
@@ -97,12 +103,14 @@ function UserJoinPage(props) {
 
     const handleJoinSubmitOnClick = async () => {
         const signupData = await signupApi(inputUser);
-        if(!signupData.isSuceess) {
+        if (!signupData.isSuceess) {
             showFieldErrorMessage(signupData.fieldErrors);
             return;
         }
-
+        const toEmail = signupData.ok.user.email;
+        await sendMail.mutateAsync(toEmail);
         alert(`${signupData.ok.message}`);
+
         navigate("/user/login");
     }
 
@@ -115,7 +123,7 @@ function UserJoinPage(props) {
             email: <></>,
         };
 
-        for(let fieldError of fieldErrors) {
+        for (let fieldError of fieldErrors) {
             EmptyFieldErrors = {
                 ...EmptyFieldErrors,
                 [fieldError.field]: <p>{fieldError.defaultMessage}</p>,
@@ -130,23 +138,23 @@ function UserJoinPage(props) {
             <Link to={"/"}><h1 css={logo}>사이트 로고</h1></Link>
             <div css={joinInfoBox}>
                 <div>
-                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username} placeholder='아이디'/>
+                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username} placeholder='아이디' />
                     {fieldErrorMessages.username}
                 </div>
                 <div>
-                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password} placeholder='비밀번호'/>
+                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password} placeholder='비밀번호' />
                     {fieldErrorMessages.password}
                 </div>
                 <div>
-                    <input type="password" name='checkPassword' onChange={handleInputUserOnChange} value={inputUser.checkPassword} placeholder='비밀번호 확인'/>
+                    <input type="password" name='checkPassword' onChange={handleInputUserOnChange} value={inputUser.checkPassword} placeholder='비밀번호 확인' />
                     {fieldErrorMessages.checkPassword}
                 </div>
                 <div>
-                    <input type="text" name='name' onChange={handleInputUserOnChange} value={inputUser.name} placeholder='성명'/>
+                    <input type="text" name='name' onChange={handleInputUserOnChange} value={inputUser.name} placeholder='성명' />
                     {fieldErrorMessages.name}
                 </div>
                 <div>
-                    <input type="email" name='email' onChange={handleInputUserOnChange} value={inputUser.email} placeholder='이메일주소'/>
+                    <input type="email" name='email' onChange={handleInputUserOnChange} value={inputUser.email} placeholder='이메일주소' />
                     {fieldErrorMessages.email}
                 </div>
             </div>

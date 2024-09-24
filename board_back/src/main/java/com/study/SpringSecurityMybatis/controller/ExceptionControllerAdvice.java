@@ -44,5 +44,9 @@ public class ExceptionControllerAdvice {
         return ResponseEntity.status(403).body(e.getMessage());
     }
 
+    @ExceptionHandler(EmailValidException.class)
+    public ResponseEntity<?> emailValidException(EmailValidException e) {
+        return ResponseEntity.status(403).body(e.getMessage());
+    }
 
 }
