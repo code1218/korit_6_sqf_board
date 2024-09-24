@@ -1,6 +1,11 @@
 package com.study.SpringSecurityMybatis.service;
 
+import com.study.SpringSecurityMybatis.controller.AuthenticationController;
 import com.study.SpringSecurityMybatis.dto.request.ReqSendMailDto;
+import com.study.SpringSecurityMybatis.entity.User;
+import com.study.SpringSecurityMybatis.repository.UserMapper;
+import com.study.SpringSecurityMybatis.security.jwt.JwtProvider;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +22,12 @@ public class EmailService {
     private String fromEmail;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private AuthenticationController authenticationController;
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserMapper userMapper;
 
     public Boolean send(String toEmail, String fromEmail, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -51,16 +62,34 @@ public class EmailService {
         return send(dto.getToEmail(), fromEmail, dto.getSubject(), htmlContent.toString());
     }
 
-    public Boolean sendAuthMail(String toEmail) {
+    public Boolean sendAuthMail(String toEmail, String username) {
         StringBuilder htmlContent = new StringBuilder();
         htmlContent.append("<div style='display:flex;justify-content:center;align-items:center;flex-direction:column;width:400px;'>");
         htmlContent.append("<h2>회원가입을 완료하시려면 아래의 인증하기 버튼을 클릭하세요.</h2>");
-        htmlContent.append("<a target='_blank' href='http://localhost:8080/auth/mail?token='");
-        htmlContent.append("");
+        htmlContent.append("<a target='_blank' href='http://localhost:8080/auth/mail?token=");
+        htmlContent.append(jwtProvider.generateEmailValidToken(username));
         htmlContent.append("'>인증하기</a>");
         htmlContent.append("</div>");
 
         return send(toEmail, fromEmail, "우리 사이트의 가입을 위한 인증메일입니다.", htmlContent.toString());
+    }
+
+    public String validToken(String token) {
+        try {
+            Claims claims = jwtProvider.getClaims(token);
+            String username = claims.get("username").toString();
+            User user = userMapper.findByUsername(username);
+            if(user == null) {
+                return "notFoundUser";
+            }
+            if(user.getEmailValid() == 1) {
+                return "verified";
+            }
+            userMapper.modifyEmailValidByUsername(username);
+        } catch (Exception e) {
+            return "validTokenFail";
+        }
+        return "success";
     }
 
 }

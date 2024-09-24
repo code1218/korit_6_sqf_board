@@ -44,6 +44,14 @@
             id = #{id}
     </update>
 
+    <update id="modifyEmailValidByUsername">
+        update user
+        set
+            email_valid = 1
+        where
+            username = #{username}
+    </update>
+
     <delete id="deleteById">
         delete
         from

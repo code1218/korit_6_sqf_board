@@ -95,7 +95,7 @@ public class UserService {
         User user = checkUsernameAndPassword(dto.getUsername(), dto.getPassword());
 
         if(user.getEmailValid() != 1) {
-            throw new EmailValidException();
+            throw new EmailValidException(user.getEmail());
         }
 
         return RespSigninDto.builder()

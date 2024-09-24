@@ -46,7 +46,10 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(EmailValidException.class)
     public ResponseEntity<?> emailValidException(EmailValidException e) {
-        return ResponseEntity.status(403).body(e.getMessage());
+        return ResponseEntity.status(403).body(Map.of(
+                "message", e.getMessage(),
+                "email", e.getEmail()
+        ));
     }
 
 }

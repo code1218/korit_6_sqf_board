@@ -91,7 +91,8 @@ function UserJoinPage(props) {
     });
 
     const sendMail = useMutation(
-        async (toEmail) => await instance.post("/auth/mail", { toEmail })
+        async ({ toEmail, username }) =>
+            await instance.post("/auth/mail", { toEmail, username })
     )
 
     const handleInputUserOnChange = (e) => {
@@ -108,7 +109,8 @@ function UserJoinPage(props) {
             return;
         }
         const toEmail = signupData.ok.user.email;
-        await sendMail.mutateAsync(toEmail);
+        const username = signupData.ok.user.username;
+        await sendMail.mutateAsync({ toEmail, username });
         alert(`${signupData.ok.message}`);
 
         navigate("/user/login");

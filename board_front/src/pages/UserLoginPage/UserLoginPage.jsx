@@ -73,15 +73,15 @@ const loginButton = css`
 function UserLoginPage(props) {
     const navigate = useNavigate();
 
-    const [ inputUser, setInputUser ] = useState({
+    const [inputUser, setInputUser] = useState({
         username: "",
         password: "",
     });
 
-    const [ fieldErrorMessages, setFieldErrorMessages ] = useState({
+    const [fieldErrorMessages, setFieldErrorMessages] = useState({
         username: <></>,
         password: <></>,
-    }); 
+    });
 
     const handleInputUserOnChange = (e) => {
         setInputUser(inputUser => ({
@@ -96,7 +96,7 @@ function UserLoginPage(props) {
             password: <></>,
         };
 
-        for(let fieldError of fieldErrors) {
+        for (let fieldError of fieldErrors) {
             EmptyFieldErrors = {
                 ...EmptyFieldErrors,
                 [fieldError.field]: <p>{fieldError.defaultMessage}</p>,
@@ -108,11 +108,11 @@ function UserLoginPage(props) {
 
     const handleLoginSubmitOnClick = async () => {
         const signinData = await signinApi(inputUser);
-        if(!signinData.isSuceess) {
-            if(signinData.errorStatus === 'fieldError') {
+        if (!signinData.isSuceess) {
+            if (signinData.errorStatus === 'fieldError') {
                 showFieldErrorMessage(signinData.error);
             }
-            if(signinData.errorStatus === 'loginError') {
+            if (signinData.errorStatus === 'loginError') {
                 let EmptyFieldErrors = {
                     username: <></>,
                     password: <></>,
@@ -120,17 +120,28 @@ function UserLoginPage(props) {
                 setFieldErrorMessages(EmptyFieldErrors);
                 alert(signinData.error);
             }
+            if (signinData.errorStatus === 'validEmail') {
+                if (window.confirm(`${signinData.error.message}`)) {
+                    const response = await instance.post("/auth/mail", {
+                        toEmail: signinData.error.email,
+                        username: inputUser.username
+                    });
+                    if (response.status === 200) {
+                        alert("인증메일을 전송하였습니다.");
+                    }
+                }
+            }
             return;
         }
 
         localStorage.setItem("accessToken", "Bearer " + signinData.token.accessToken);
-        
+
         instance.interceptors.request.use(config => {
             config.headers["Authorization"] = localStorage.getItem("accessToken");
             return config;
         });
 
-        if(window.history.length > 2) {
+        if (window.history.length > 2) {
             navigate(-1);
             return;
         }
@@ -142,11 +153,11 @@ function UserLoginPage(props) {
             <Link to={"/"}><h1 css={logo}>사이트 로고</h1></Link>
             <div css={loginInfoBox}>
                 <div>
-                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username} placeholder='아이디'/>
+                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username} placeholder='아이디' />
                     {fieldErrorMessages.username}
                 </div>
                 <div>
-                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password} placeholder='비밀번호'/>
+                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password} placeholder='비밀번호' />
                     {fieldErrorMessages.password}
                 </div>
             </div>

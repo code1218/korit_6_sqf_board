@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 import { instance } from '../../apis/util/instance';
+import { RingLoader } from 'react-spinners';
 /** @jsxImportSource @emotion/react */
 
 const layout = css`
@@ -28,6 +29,20 @@ const layout = css`
     & textarea {
         height: 500px;
     }
+`;
+
+const loadingLayout = css`
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #00000033;
 `;
 
 function MailPage(props) {
@@ -60,6 +75,15 @@ function MailPage(props) {
 
     return (
         <div css={layout}>
+            {
+                sendMail.isLoading
+                    ?
+                    <div css={loadingLayout}>
+                        <RingLoader />
+                    </div>
+                    :
+                    <></>
+            }
             <Link to={"/"}><h1>메인 페이지</h1></Link>
 
             <input type="text" name='toEmail' placeholder='받는 사람'
